@@ -10,6 +10,6 @@
 
   <!-- Run Rviz with gmapping configuration-->
   <param name="use_gui" value="true"/>
-  <arg name="config" default="gmapping" />
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find jackal_viz)/rviz/$(arg config).rviz" />
+  <arg name="config" default="patrolling" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find patrolling)/configs/$(arg config).rviz" />
 </launch>
