@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(lab4_patrolling)
+project(patrolling)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -106,7 +106,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES lab4_patrolling
+#  LIBRARIES patrolling
 #  CATKIN_DEPENDS geometry_msgs message_generation message_runtime move_base move_base_msgs roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
@@ -123,24 +123,24 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(lab4_patrolling
-#   src/${PROJECT_NAME}/lab4_patrolling.cpp
+# add_library(patrolling
+#   src/${PROJECT_NAME}/patrolling.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(lab4_patrolling ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(patrolling ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-# add_executable(lab4_patrolling_node src/lab4_patrolling_node.cpp)
+# add_executable(patrolling_node src/patrolling_node.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(lab4_patrolling_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(patrolling_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(lab4_patrolling_node
+# target_link_libraries(patrolling_node
 #   ${catkin_LIBRARIES}
 # )
 
@@ -159,7 +159,7 @@ include_directories(
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS lab4_patrolling lab4_patrolling_node
+# install(TARGETS patrolling patrolling_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -184,7 +184,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_lab4_patrolling.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_patrolling.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
