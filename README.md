@@ -9,6 +9,8 @@ After cloning this repository, follow these steps to setup the development envir
 $ cd catkin_ws/src
 $ catkin_init_workspace
 $ cd ..
+$ git submodule init
+$ git submodule update
 ```
 
 Finally, you can build the project and start working on it.
