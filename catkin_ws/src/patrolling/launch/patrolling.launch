@@ -1,0 +1,5 @@
+<launch>
+  <include file="$(find patrolling)/launch/lab4.launch"/>
+
+
+</launch>
