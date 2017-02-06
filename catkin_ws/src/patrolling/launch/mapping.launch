@@ -10,6 +10,5 @@
 
   <!-- Run Rviz with gmapping configuration-->
   <param name="use_gui" value="true"/>
-  <arg name="config" default="patrolling" />
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find patrolling)/configs/$(arg config).rviz" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find patrolling)/rviz/mapping.rviz" />
 </launch>
