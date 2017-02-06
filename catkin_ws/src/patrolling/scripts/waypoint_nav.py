@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 import rospy
 import actionlib
-import random
 from geometry_msgs.msg import Pose, PoseStamped
 from move_base_msgs.msg	import MoveBaseGoal, MoveBaseAction
+from visualization_msgs.msg import MarkerArray, Marker
 
 class WaypointNav(object):
     def __init__(self):
@@ -25,22 +25,56 @@ class WaypointNav(object):
         self.sub = rospy.Subscriber("move_base_simple/goal", PoseStamped,
                                     self._update_waypoints)
 
+        self.viz_pub = rospy.Publisher("patrolling/viz_waypoints_array",
+                                       MarkerArray, queue_size=10)
+        self._publish_markers()
+
         rospy.loginfo("Waypoint Nav ready.")
 
     def _update_waypoints(self, data):
         latest = MoveBaseGoal(target_pose = data)
-        
+
         if rospy.get_param('/waypoints_nav/patrolling/update_patrol'):
             self.waypoints.insert(self.waypoint_index, latest)
 
             if rospy.get_param('/waypoints_nav/patrolling/save_latest'):
-                ros.set_param_raw('/waypoints_nav/patrolling/waypoints', self.waypoints)
+                ros.set_param_raw('/waypoints_nav/patrolling/waypoints',
+                                  self.waypoints)
+
+    def _publish_markers(self):
+        markers = []
+        id = 0
+        for wp in self.waypoints:
+            temp = Marker()
+
+            # temp.header = wp.target_pose.header
+            temp.id = id
+            temp.ns = "patrolling"
+            temp.action = Marker.ADD
+
+            temp.type = Marker.CUBE
+            temp.pose = wp.target_pose.pose
+            temp.scale.x = 1
+            temp.scale.y = 1
+            temp.scale.z = 1
+            temp.color.a = 1
+            temp.color.r = 1
+            temp.color.g = 1
+            temp.color.b = 1
+
+            markers.append(temp)
+            id = id + 1
+
+        self.viz_pub.publish(markers=markers)
+        rospy.loginfo("Markers Published")
 
     def start_nav(self):
         self.mvbs.wait_for_server()
 
         while not rospy.is_shutdown():
             rospy.loginfo(self.waypoints[self.waypoint_index])
+
+            self._publish_markers()
 
             self.mvbs.send_goal(self.waypoints[self.waypoint_index])
             self.mvbs.wait_for_result()

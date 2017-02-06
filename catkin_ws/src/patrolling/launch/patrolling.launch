@@ -1,6 +1,9 @@
 <launch>
   <include file="$(find patrolling)/launch/lab4.launch"/>
 
+  <param name="use_gui" value="true"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find patrolling)/rviz/patrolling.rviz" />
+
   <node pkg="patrolling" name="jackal_spawner" type="jackal_spawner.py"  output="screen"/>
 
   <node pkg="patrolling" name="waypoints_nav" type="waypoint_nav.py" output="screen">
