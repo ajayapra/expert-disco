@@ -4,6 +4,6 @@
   <node pkg="patrolling" name="jackal_spawner" type="jackal_spawner.py"  output="screen"/>
 
   <node pkg="patrolling" name="waypoints_nav" type="waypoint_nav.py" output="screen">
-    <rosparam command="load" file="$(find patrolling)/config/mapping.yaml" ns="patrolling"/>
+    <rosparam command="load" file="$(find patrolling)/configs/waypoints.yaml" ns="patrolling"/>
   </node>
 </launch>
