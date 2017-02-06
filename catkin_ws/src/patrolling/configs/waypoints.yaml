@@ -1,4 +1,6 @@
-save_latest: yes
+save_latest:    no  # Saves newly added waypoints to this config file
+                    #   - Only works is 'update_patrol' is also enabled
+update_patrol: yes  # Adds newly added waypoints to future patrols
 waypoints:
   - x:  0.0
     y:  0.0

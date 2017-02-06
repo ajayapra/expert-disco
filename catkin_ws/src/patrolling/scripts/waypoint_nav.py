@@ -2,29 +2,54 @@
 import rospy
 import actionlib
 import random
-from move_base_msgs.msg	import MoveBaseAction
+from geometry_msgs.msg import Pose, PoseStamped
+from move_base_msgs.msg	import MoveBaseGoal, MoveBaseAction
 
-def waypoint_nav_node():
-    rospy.init_node('waypoint_nav')
+class WaypointNav(object):
+    def __init__(self):
+        self.waypoints = []
+        self.waypoint_index = 0
 
-    mvbs = actionlib.SimpleActionClient('move_base', MoveBaseAction)
-    mvbs.wait_for_server()
+        rospy.init_node('waypoint_nav')
 
-    waypoint_index = 0
-    rospy.logerr(rospy.get_param('/waypoints_nav/patrolling/waypoints'))
+        for wp in rospy.get_param('/waypoints_nav/patrolling/waypoints'):
+            temp = MoveBaseGoal()
 
-    rospy.loginfo("Waypoint Nav ready.")
-    while not rospy.is_shutdown():
-        rospy.loginfo(waypoints[waypoint_index])
+            temp.target_pose.header.frame_id = 'base_link'
+            temp.target_pose.pose = Pose(position=wp)
 
-        mvbs.send_goal(waypoints[waypoint_index])
-        mvbs.wait_for_result()
-        rospy.loginfo("Nav goal met, setting another one...")
+            self.waypoints.append(temp)
 
-        if len(waypoints) >= waypoint_index:
-            waypoint_index = 0
-        else:
-            waypoint_index = waypoint_index + 1
+        self.mvbs = actionlib.SimpleActionClient('move_base', MoveBaseAction)
+
+        self.sub = rospy.Subscriber("move_base_simple/goal", PoseStamped,
+                                    self._update_waypoints)
+
+        rospy.loginfo("Waypoint Nav ready.")
+
+    def _update_waypoints(self, data):
+        latest = MoveBaseGoal(target_pose = data)
+        
+        if rospy.get_param('/waypoints_nav/patrolling/update_patrol'):
+            self.waypoints.insert(self.waypoint_index, latest)
+
+            if rospy.get_param('/waypoints_nav/patrolling/save_latest'):
+                ros.set_param_raw('/waypoints_nav/patrolling/waypoints', self.waypoints)
+
+    def start_nav(self):
+        self.mvbs.wait_for_server()
+
+        while not rospy.is_shutdown():
+            rospy.loginfo(self.waypoints[self.waypoint_index])
+
+            self.mvbs.send_goal(self.waypoints[self.waypoint_index])
+            self.mvbs.wait_for_result()
+            rospy.loginfo("Nav goal met, setting another one...")
+
+            if len(self.waypoints) >= self.waypoint_index:
+                self.waypoint_index = 0
+            else:
+                self.waypoint_index = self.waypoint_index + 1
 
 if __name__ == "__main__":
-    waypoint_nav_node()
+    WaypointNav().start_nav()
