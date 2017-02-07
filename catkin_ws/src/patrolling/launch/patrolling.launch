@@ -10,8 +10,7 @@
     <rosparam command="load" file="$(find patrolling)/configs/waypoints.yaml" ns="patrolling"/>
   </node>
 
-  <include file="$(find jackal_viz)/launch/view_robot.launch">
-    <arg name="config" default="localization"/>
-  </include>
+  <param name="use_gui" value="true"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find patrolling)/rviz/patrolling.rviz" />
 
 </launch>

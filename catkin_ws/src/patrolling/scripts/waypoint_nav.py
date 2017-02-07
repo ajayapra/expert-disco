@@ -47,27 +47,25 @@ class WaypointNav(object):
 
     def _publish_markers(self):
         markers = []
-        id = 0
-        for wp in self.waypoints:
+        for i, wp in enumerate(self.waypoints):
             temp = Marker()
 
-            # temp.header = wp.target_pose.header
-            temp.id = id
+            temp.header = wp.target_pose.header
+            temp.id = i
             temp.ns = "patrolling"
             temp.action = Marker.ADD
 
             temp.type = Marker.CUBE
             temp.pose = wp.target_pose.pose
-            temp.scale.x = 1
-            temp.scale.y = 1
-            temp.scale.z = 1
+            temp.scale.x = 0.5
+            temp.scale.y = 0.5
+            temp.scale.z = 0.5
             temp.color.a = 1
-            temp.color.r = 1
+            temp.color.r = 0
             temp.color.g = 1
-            temp.color.b = 1
+            temp.color.b = 0
 
             markers.append(temp)
-            id = id + 1
 
         self.viz_pub.publish(markers=markers)
         rospy.loginfo("Markers Published")
@@ -84,7 +82,7 @@ class WaypointNav(object):
             self.mvbs.wait_for_result()
             rospy.loginfo("Nav goal met, setting another one...")
 
-            if self.waypoint_index >= len(self.waypoints):
+            if self.waypoint_index > len(self.waypoints):
                 self.waypoint_index = 0
             else:
                 self.waypoint_index = self.waypoint_index + 1
