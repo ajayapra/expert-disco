@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 import rospy
 import actionlib
-from geometry_msgs.msg import Pose, PoseStamped
+import math
+from geometry_msgs.msg import Pose, PoseStamped, PoseWithCovarianceStamped
 from move_base_msgs.msg	import MoveBaseGoal, MoveBaseAction
 from visualization_msgs.msg import MarkerArray, Marker
 
 class WaypointNav(object):
     def __init__(self):
         self.waypoints = []
-        self.waypoint_index = 0
+        self.waypoint_index = None
 
         rospy.init_node('waypoint_nav')
 
@@ -26,14 +27,33 @@ class WaypointNav(object):
 
         self.mvbs = actionlib.SimpleActionClient('move_base', MoveBaseAction)
 
-        self.sub = rospy.Subscriber("move_base_simple/goal", PoseStamped,
-                                    self._update_waypoints)
+        self.goal_sub = rospy.Subscriber("move_base_simple/goal", PoseStamped,
+                                         self._update_waypoints)
+
+        self.amcl_sub = rospy.Subscriber("amcl_pose", PoseWithCovarianceStamped,
+                                         self._nearest_waypoint)
 
         self.viz_pub = rospy.Publisher("patrolling/viz_waypoints_array",
                                        MarkerArray, queue_size=10)
         self._publish_markers()
 
         rospy.loginfo("Waypoint Nav ready.")
+
+    def _nearest_waypoint(self, pose):
+        if not self.waypoint_index:
+            shortest_len = float('inf')
+            shortest_len_index = 0
+            x = pose.pose.pose.position.x
+            y = pose.pose.pose.position.y
+
+            for i, wp in enumerate(self.waypoints):
+                test_len = math.hypot(wp.target_pose.pose.position.x - x,
+                                      wp.target_pose.pose.position.y - y)
+                if test_len < shortest_len:
+                    shortest_len = test_len
+                    shortest_len_index = i
+
+            self.waypoint_index = shortest_len_index
 
     def _update_waypoints(self, data):
         latest = MoveBaseGoal(target_pose = data)
@@ -72,8 +92,15 @@ class WaypointNav(object):
 
     def start_nav(self):
         self.mvbs.wait_for_server()
+        forward = True
+
+        while not self.waypoint_index:
+            pass
+
+        rospy.loginfo("Nearest waypoint is #{}".format(self.waypoint_index))
 
         while not rospy.is_shutdown():
+            rospy.loginfo(self.waypoint_index)
             rospy.loginfo(self.waypoints[self.waypoint_index])
 
             self._publish_markers()
@@ -82,10 +109,15 @@ class WaypointNav(object):
             self.mvbs.wait_for_result()
             rospy.loginfo("Nav goal met, setting another one...")
 
-            if self.waypoint_index > len(self.waypoints):
-                self.waypoint_index = 0
-            else:
+            if self.waypoint_index >= len(self.waypoints) - 1:
+                forward = False
+            elif self.waypoint_index <= 0:
+                forward = True
+
+            if forward:
                 self.waypoint_index = self.waypoint_index + 1
+            else:
+                self.waypoint_index = self.waypoint_index - 1
 
 if __name__ == "__main__":
     WaypointNav().start_nav()
