@@ -15,7 +15,7 @@ class WaypointNav(object):
         for wp in rospy.get_param('/waypoints_nav/patrolling/waypoints'):
             temp = MoveBaseGoal()
 
-            temp.target_pose.header.frame_id = 'base_link'
+            temp.target_pose.header.frame_id = 'map'
             temp.target_pose.pose.position.x = wp['x']
             temp.target_pose.pose.position.y = wp['y']
             temp.target_pose.pose.position.z = wp['z']
