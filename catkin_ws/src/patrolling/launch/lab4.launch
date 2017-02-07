@@ -12,8 +12,6 @@
   </include>
   <include file="$(find jackal_control)/launch/control.launch" />
 
-  <node pkg="patrolling" name="spawner" type="jackal_spawner.py"/>
-
   <!--- Run Move Base -->
   <include file="$(find jackal_navigation)/launch/include/move_base.launch" />
 </launch>
