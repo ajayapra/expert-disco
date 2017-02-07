@@ -8,7 +8,7 @@ import os
 
 
 # load the path for the image and read the image file
-folder_path = '/home/mano/expert-disco/catkin_ws/src/patrolling/maps/map_obstacle.pgm'
+folder_path = 'map_obstacle.pgm'
 img = cv2.imread(folder_path)
 
 
@@ -32,12 +32,14 @@ def coordinate_to_pixel(x, y):
 
 def scale_finder(x, y):
     ix, iy = coordinate_to_pixel(x, y)
+    print('The coordinates-pixels are x:{} and y:{}').format(ix, iy)
     check_seg = img[ix-10:ix+10, iy-10:iy+10, 0]
 
     check_seg_np = np.array(check_seg)
     check_seg_np = np.concatenate(check_seg_np, axis=0)
 
     idx = np.where(check_seg_np < 240)
+
     return idx
 
 
@@ -45,6 +47,7 @@ def spawn_check(x, y):
     if np.sum(scale_finder(x, y)) > 0:
         return True
     else:
+        print('Found the right point.')
         return False
 
 
@@ -64,12 +67,12 @@ def random_point():
 def main():
 
     x, y = random_point()
-    # print(x)
-    # print(y)
-    test = 'rosrun gazebo_ros spawn_model -urdf -model jackal -param robot_description -x "%f" -y "%f" -z 1.0' % (x, y)
-    amcl = 'roslaunch patrolling amcl_custom.launch initial_x:="%f" initial_y:="%f"' % (x, y)
-    os.system(test)
-    os.system(amcl)
+    print(x)
+    print(y)
+    # test = 'rosrun gazebo_ros spawn_model -urdf -model jackal -param robot_description -x "%f" -y "%f" -z 1.0' % (x, y)
+    # amcl = 'roslaunch patrolling amcl_custom.launch initial_x:="%f" initial_y:="%f"' % (x, y)
+    # os.system(test)
+    # os.system(amcl)
 
 if __name__ == '__main__':
     main()
