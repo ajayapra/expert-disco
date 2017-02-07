@@ -20,15 +20,18 @@ xmax = x_init*resolution + xmin
 ymin = -10.00
 ymax = y_init*resolution + ymin
 
-def scale_finder(ix, iy):
-    # ix, iy = coordinate_to_pixel(x, y)
-    
 
 def coordinate_to_pixel(x, y):
-    global xmin, ymin
+    global xmin
+    global ymin
     ix = round((x-xmin)/0.02)
     iy = round((y-ymin)/0.02)
     return ix, iy
+
+
+def scale_finder(ix, iy):
+    # ix, iy = coordinate_to_pixel(x, y)
+
 
 
 def spawn_check(x, y):
@@ -39,7 +42,10 @@ def spawn_check(x, y):
 
 def random_point():
     global loop
-    global xmin, xmax, ymin, ymax
+    global xmin
+    global xmax
+    global ymin
+    global ymax
     while loop:
         x = random.uniform(xmin, xmax)
         y = random.uniform(ymin, ymax)
@@ -48,12 +54,12 @@ def random_point():
 
 
 def main():
+
     x, y = random_point()
-
-    test = 'rosrun gazebo_ros spawn_model -urdf -model jackal -param robot_description -x "%f" -y "%f" -z 1.0' % (x, y)
-    print test
+    test = 'rosrun gazebo_ros spawn_model -urdf -model jackal -param robot_description -x "%f" -y "%f" -z 1.0'%(x,y)
+    amcl = 'roslaunch patrolling amcl_custom.launch initial_x:="%f" initial_y:="%f"'%(x,y)
     os.system(test)
-
+    os.system(amcl)
 
 if __name__ == '__main__':
     main()
