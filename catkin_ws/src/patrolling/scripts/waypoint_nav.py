@@ -15,8 +15,12 @@ class WaypointNav(object):
         for wp in rospy.get_param('/waypoints_nav/patrolling/waypoints'):
             temp = MoveBaseGoal()
 
-            temp.target_pose.header.frame_id = 'base_link'
-            temp.target_pose.pose = Pose(position=wp)
+            temp.target_pose.header.frame_id = 'map'
+            temp.target_pose.pose.position.x = wp['x']
+            temp.target_pose.pose.position.y = wp['y']
+            temp.target_pose.pose.position.z = wp['z']
+
+            temp.target_pose.pose.orientation.w = 1
 
             self.waypoints.append(temp)
 
@@ -80,7 +84,7 @@ class WaypointNav(object):
             self.mvbs.wait_for_result()
             rospy.loginfo("Nav goal met, setting another one...")
 
-            if len(self.waypoints) >= self.waypoint_index:
+            if self.waypoint_index >= len(self.waypoints):
                 self.waypoint_index = 0
             else:
                 self.waypoint_index = self.waypoint_index + 1

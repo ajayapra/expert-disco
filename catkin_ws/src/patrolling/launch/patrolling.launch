@@ -1,12 +1,17 @@
 <launch>
   <include file="$(find patrolling)/launch/lab4.launch"/>
 
-  <param name="use_gui" value="true"/>
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find patrolling)/rviz/patrolling.rviz" />
-
+  <!-- Run the map server -->
+  <arg name="map_file" default="$(find jackal_navigation)/maps/jackal_race.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
   <node pkg="patrolling" name="jackal_spawner" type="jackal_spawner.py"  output="screen"/>
 
   <node pkg="patrolling" name="waypoints_nav" type="waypoint_nav.py" output="screen">
     <rosparam command="load" file="$(find patrolling)/configs/waypoints.yaml" ns="patrolling"/>
   </node>
+
+  <include file="$(find jackal_viz)/launch/view_robot.launch">
+    <arg name="config" default="localization"/>
+  </include>
+
 </launch>

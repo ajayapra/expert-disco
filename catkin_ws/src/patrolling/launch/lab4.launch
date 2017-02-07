@@ -7,7 +7,6 @@
     <arg name="headless" value="false" />
     <arg name="world_name" default="$(find jackal_gazebo)/worlds/jackal_race.world" />
   </include>
-
   <include file="$(find jackal_description)/launch/description.launch">
     <arg name="config" value="front_laser" />
   </include>
