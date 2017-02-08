@@ -8,7 +8,7 @@ import os
 
 
 # load the path for the image and read the image file
-folder_path = '/home/mano/expert-disco/catkin_ws/src/patrolling/maps/map_obstacle.pgm'
+folder_path = '/home/robotics4/expert-disco/catkin_ws/src/patrolling/maps/map_obstacle_dilated.pgm'
 img = cv2.imread(folder_path)
 
 
@@ -55,8 +55,8 @@ def random_point():
     global y_min
     global y_max
     while loop:
-        x = random.uniform(x_min+5, x_max+5)
-        y = random.uniform(y_min+3, y_max+3)
+        x = random.uniform(-8, 8)
+        y = random.uniform(-6, 6)
         loop = spawn_check(x, y)
     return x, y
 
