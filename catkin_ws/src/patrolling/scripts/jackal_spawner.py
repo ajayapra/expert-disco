@@ -8,7 +8,7 @@ import os
 
 
 # load the path for the image and read the image file
-folder_path = '/home/robotics4/expert-disco/catkin_ws/src/patrolling/maps/map_obstacle_dilated.pgm'
+folder_path = '/home/robotics4/expert-disco/catkin_ws/src/patrolling/maps/map_obstacle.pgm'
 img = cv2.imread(folder_path)
 
 
@@ -66,6 +66,7 @@ def main():
     x, y = random_point()
     # print(x)
     # print(y)
+
     test = 'rosrun gazebo_ros spawn_model -urdf -model jackal -param robot_description -x "%f" -y "%f" -z 1.0' % (x, y)
     amcl = 'roslaunch patrolling amcl_custom.launch initial_x:="%f" initial_y:="%f"' % (x, y)
     os.system(test)
