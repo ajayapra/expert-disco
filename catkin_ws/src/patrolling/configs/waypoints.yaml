@@ -2,18 +2,18 @@ save_latest:    no  # Saves newly added waypoints to this config file
                     #   - Only works is 'update_patrol' is also enabled
 update_patrol: yes  # Adds newly added waypoints to future patrols
 waypoints:
-  - x:  0.0
-    y:  0.0
+  - x:  8.5
+    y: -8.5
     z:  1.0
-  - x:  5.0
-    y:  5.0
+  - x: -2.0
+    y: -1.0
     z:  1.0
-  - x:  5.0
-    y: -5.0
+  - x: -6.0
+    y:  4.0
     z:  1.0
-  - x: -5.0
-    y: -5.0
+  - x:  7.0
+    y: -2.0
     z:  1.0
-  - x:  5.0
-    y: -5.0
+  - x:  1.0
+    y: -4.0
     z:  1.0
