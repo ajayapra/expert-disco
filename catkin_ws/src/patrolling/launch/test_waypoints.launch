@@ -1,0 +1,12 @@
+<launch>
+  <include file="$(find patrolling)/launch/lab4.launch"/>
+
+  <!-- Run the map server -->
+  <arg name="map_file" default="$(find jackal_navigation)/maps/jackal_race.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+  <node pkg="patrolling" name="jackal_spawner" type="jackal_spawner.py"  output="screen"/>
+
+  <param name="use_gui" value="true"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find patrolling)/rviz/patrolling.rviz" />
+
+</launch>

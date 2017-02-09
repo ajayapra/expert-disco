@@ -32,7 +32,7 @@ def coordinate_to_pixel(x, y):
 
 def scale_finder(x, y):
     ix, iy = coordinate_to_pixel(x, y)
-    check_seg = img[ix-10:ix+10, iy-10:iy+10, 0]
+    check_seg = img[ix-25:ix+25, iy-25:iy+25, 0]
 
     check_seg_np = np.array(check_seg)
     check_seg_np = np.concatenate(check_seg_np, axis=0)
@@ -55,7 +55,7 @@ def random_point():
     global y_min
     global y_max
     while loop:
-        x = random.uniform(-8, 8)
+        x = random.uniform(-7, 7)
         y = random.uniform(-6, 6)
         loop = spawn_check(x, y)
     return x, y
