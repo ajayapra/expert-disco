@@ -94,8 +94,7 @@ class WaypointNav(object):
         self.mvbs.wait_for_server()
         forward = True
 
-        while not self.waypoint_index:
-            pass
+        rospy.wait_for_message("amcl_pose", PoseWithCovarianceStamped)
 
         rospy.loginfo("Nearest waypoint is #{}".format(self.waypoint_index))
 
